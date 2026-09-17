@@ -1,0 +1,117 @@
+<?php
+
+include("connection.php");
+
+
+
+try {
+  if (isset($_POST["prodBtn"])) {
+
+    $prodName = $_POST["prodName"]; //Mouse, Duster, Bottle
+    $prodPrice = $_POST["prodPrice"]; //2000, 3000, 4000
+    $prodDesc = $_POST["prodDesc"]; //Good Product
+    $prodImage = $_FILES['prodImage'];
+
+    echo "<pre>";
+    print_r($prodImage);
+    echo "</pre>";
+
+    if ($prodImage['size'] > 5000000) {
+      echo "Image size is too large";
+    } else {
+      // echo "<pre>";
+      // print_r(explode(".",$prodImage['name'])[1]);
+      // echo "</pre>";
+
+
+      $extension = explode(".", $prodImage['name'])[1];
+      // $extension = $extension[1];
+
+      // echo "<pre>";
+      // print_r($extension);
+      // echo "</pre>";
+
+      // echo uniqid();
+
+
+      $uniqueName = uniqid() . "." . $extension;
+      echo $uniqueName;
+
+      move_uploaded_file($prodImage['tmp_name'],"images/$uniqueName");
+
+
+
+    echo $prodName;
+    echo "<br>";
+    echo $prodPrice;
+    echo "<br>";
+    echo $prodDesc;
+
+    $insertQuery = "INSERT INTO `products`(`prod_name`, `prod_price`, `prod_desc`,`prod_image`) VALUES (:prodName, :prodPrice, :prodDesc, :prodImage)";
+
+    $insertPrepare =  $connect->prepare($insertQuery);
+
+    $insertPrepare->bindParam(":prodName", $prodName, PDO::PARAM_STR);
+    $insertPrepare->bindParam(":prodPrice", $prodPrice, PDO::PARAM_INT);
+    $insertPrepare->bindParam(":prodDesc", $prodDesc, PDO::PARAM_STR);
+    $insertPrepare->bindParam(":prodImage", $uniqueName, PDO::PARAM_STR);
+
+    if ($insertPrepare->execute()) {
+      echo "<br> Product Added successfully!";
+    }
+    else{
+      echo "<br> Product insertion failed";
+
+    }
+  }
+  }
+} catch (\Throwable $th) {
+  throw $th;
+}
+
+
+?>
+
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADD PRODUCTS</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+  <h1 class="text-center">PDO ADD PRODUCTS</h1>
+  <div class="container">
+    <form class="row g-3" method="post" enctype="multipart/form-data">
+      <div class="col-md-6">
+        <label for="inputEmail4" class="form-label">Product Name</label>
+        <input type="text" name="prodName" class="form-control" id="inputEmail4">
+      </div>
+      <div class="col-md-6">
+        <label for="inputPassword4" class="form-label">Product Price</label>
+        <input type="text" name="prodPrice" class="form-control" id="inputPassword4">
+      </div>
+      <div class="col-12">
+        <label for="inputAddress" class="form-label">Product Description</label>
+        <input type="text" name="prodDesc" class="form-control" id="inputAddress">
+      </div>
+      <div class="col-12">
+        <label for="inputAddress" class="form-label">Product Image</label>
+        <input type="file" name="prodImage" class="form-control" id="inputAddress">
+      </div>
+
+
+      <div class="col-12">
+        <button type="submit" name="prodBtn" class="btn btn-primary">Add Product</button>
+      </div>
+    </form>
+    <a href="view.php">go to view page</a>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+
+</html>
