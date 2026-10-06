@@ -1,62 +1,48 @@
-<?php
+<?php 
 
 include "../connection/connection.php";
 
 
 
+$catMessage=false;
 
-$categoryViewQuery = "SELECT * FROM `category`";
+  if(isset($_POST['catBtn']))
+{
 
-$categoryViewPrepare = $connection->prepare($categoryViewQuery);
-
-$categoryViewPrepare->execute();
-
-$categoryData = $categoryViewPrepare->fetchAll(PDO::FETCH_ASSOC);
+  $catName = $_POST['catName'];
 
 
 
 
 
-$prodImageSizeError = false;
-$prodMessage = false;
-
-if (isset($_POST['prodBtn'])) {
-
-  $prodName = $_POST['prodName'];
-  $prodPrice = $_POST['prodPrice'];
-  $prodRating = $_POST['prodRating'];
-  $prodStock = $_POST['prodStock'];
-  $categoryId = $_POST['categoryId'];
-  $prodImage = $_FILES['prodImage'];
-
-
-  print_r($prodImage);
-
-
-  if ($prodImage['size'] > 5000000) {
-    $prodImageSizeError = true;
-  } else {
-    $insertQuery = "INSERT INTO `products`(`prodName`, `prodPrice`, `prodRating`, `prodStock`, `categoryId`, `prodImage`) VALUES (:prodName,  :prodPrice,  :prodRating,  :prodStock, :categoryId,  :prodImage)";
-
+    $insertQuery = "INSERT INTO `category`(`categoryName`) VALUES (:categoryName)";
+    
     $insertPrepare = $connection->prepare($insertQuery);
-    $insertPrepare->bindParam(':prodName', $prodName, PDO::PARAM_STR);
-    $insertPrepare->bindParam(':prodPrice', $prodPrice, PDO::PARAM_INT);
-    $insertPrepare->bindParam(':prodRating', $prodRating, PDO::PARAM_INT);
-    $insertPrepare->bindParam(':categoryId', $categoryId, PDO::PARAM_INT);
-    $insertPrepare->bindParam(':prodStock', $prodStock, PDO::PARAM_INT);
+    $insertPrepare->bindParam(':categoryName',$catName,PDO::PARAM_STR);
 
-    $extension = explode('.', $prodImage['name'])[1];
 
-    $uniqueName = uniqid() . "." . $extension;
-    $insertPrepare->bindParam(':prodImage', $uniqueName, PDO::PARAM_STR);
+    if($insertPrepare->execute()){
 
-    move_uploaded_file($prodImage['tmp_name'], "assets/images/$uniqueName");
+      $catMessage=true;
 
-    if ($insertPrepare->execute()) {
-
-      $prodMessage = true;
     }
-  }
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
 }
 
 
@@ -180,7 +166,8 @@ if (isset($_POST['prodBtn'])) {
 
     <!-- Sidebar Profile Card (Dynamic Footer) -->
     <div class="sidebar-profile">
-      <img src="assets/images/avatar.png" alt="Administrator" class="sidebar-profile-img" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop'">
+      <img src="assets/images/avatar.png" alt="Administrator" class="sidebar-profile-img"
+        onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop'">
       <div class="sidebar-profile-info">
         <div class="sidebar-profile-name">Administrator</div>
         <div class="sidebar-profile-email">admin@email.com</div>
@@ -201,7 +188,8 @@ if (isset($_POST['prodBtn'])) {
     <header class="navbar-custom">
       <div class="navbar-left">
         <!-- Desktop sidebar toggle -->
-        <button class="btn-desktop-toggle d-none d-xl-flex align-items-center justify-content-center me-3" id="desktop-sidebar-toggle" aria-label="Minimize Sidebar">
+        <button class="btn-desktop-toggle d-none d-xl-flex align-items-center justify-content-center me-3"
+          id="desktop-sidebar-toggle" aria-label="Minimize Sidebar">
           <i class="bi bi-chevron-bar-left"></i>
         </button>
         <!-- Mobile sidebar toggle -->
@@ -211,7 +199,8 @@ if (isset($_POST['prodBtn'])) {
 
         <!-- Quick Actions Dropdown -->
         <div class="dropdown ms-2">
-          <button class="btn-quick-action dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="quick-actions-dropdown">
+          <button class="btn-quick-action dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+            id="quick-actions-dropdown">
             <i class="bi bi-plus-lg"></i>
             <span>Create</span>
           </button>
@@ -243,11 +232,13 @@ if (isset($_POST['prodBtn'])) {
           <i class="bi bi-arrows-fullscreen"></i>
         </button>
         <div class="dropdown">
-          <button class="navbar-action-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="btn-notifications" data-bs-auto-close="outside">
+          <button class="navbar-action-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false" id="btn-notifications" data-bs-auto-close="outside">
             <i class="bi bi-bell"></i>
             <span class="navbar-action-badge"></span>
           </button>
-          <div class="dropdown-menu dropdown-menu-end dropdown-menu-notification p-0" aria-labelledby="btn-notifications">
+          <div class="dropdown-menu dropdown-menu-end dropdown-menu-notification p-0"
+            aria-labelledby="btn-notifications">
             <div class="notification-header">
               <h6 class="notification-title">Notifications</h6>
               <button class="btn-clear-all" type="button">Mark all read</button>
@@ -280,7 +271,8 @@ if (isset($_POST['prodBtn'])) {
 
         <!-- Profile Dropdown -->
         <div class="dropdown ms-2">
-          <button class="navbar-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="profile-dropdown">
+          <button class="navbar-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false" id="profile-dropdown">
             <img src="assets/images/avatar.png" alt="Profile Image" class="navbar-profile-img">
             <span class="navbar-profile-name d-none d-md-inline">Administrator</span>
             <i class="bi bi-chevron-down navbar-profile-caret"></i>
@@ -323,96 +315,49 @@ if (isset($_POST['prodBtn'])) {
       <div class="col-12 col-lg-12">
         <div class="card border-light shadow-sm p-4 h-100">
           <h5 class="card-title mb-4">Add Products</h5>
-          <?php
-          if ($prodImageSizeError) {
-            echo '  
-        <div class="alert-custom alert-custom-danger">
-          <i class="bi bi-exclamation-triangle-fill alert-custom-icon"></i>
-          <div class="alert-custom-content">
-            <strong>Image size is too large</strong> 
-          </div>
-          <button class="alert-custom-close" type="button" aria-label="Close" onclick="this.parentElement.remove();">
-            <i class="bi bi-x-lg"></i>
-          </button>
-        </div>
-    ';
-          }
-
-          ?>
 
 
-          <?php
-          if ($prodMessage) {
-            echo '  
+
+<?php
+      if($catMessage){
+        echo '  
         <div class="alert-custom alert-custom-success">
           <i class="bi bi-exclamation-triangle-fill alert-custom-icon"></i>
           <div class="alert-custom-content">
-            <strong>Product Added successfully!</strong> 
+            <strong>Category Added successfully!</strong> 
           </div>
           <button class="alert-custom-close" type="button" aria-label="Close" onclick="this.parentElement.remove();">
             <i class="bi bi-x-lg"></i>
           </button>
         </div>
     ';
-          }
+      }
 
-          ?>
-
-
-          <form method="post" enctype="multipart/form-data">
-
-            <!-- Text input -->
-
-            <div class="mb-3">
-              <label for="basicText" class="form-label-custom">Product Name</label>
-              <input type="text" class="form-control-custom" name="prodName" placeholder="Enter Product Name">
-            </div>
+?>
 
 
-            <div class="mb-3">
-              <label for="basicEmail" class="form-label-custom">Product Price</label>
-              <input type="text" class="form-control-custom" name="prodPrice" placeholder="Enter Product Price">
-            </div>
-            <div class="mb-3">
-              <label for="basicEmail" class="form-label-custom">Product Rating</label>
-              <input type="text" class="form-control-custom" name="prodRating" placeholder="Enter Product Rating">
-            </div>
-            <div class="mb-3">
-              <label for="basicEmail" class="form-label-custom">Stock</label>
-              <input type="text" class="form-control-custom" name="prodStock" placeholder="Enter Product Stock">
-            </div>
+        <form method="post" enctype="multipart/form-data">
+          
+          <!-- Text input -->
+     
+          <div class="mb-3">
+            <label for="basicText" class="form-label-custom">Category Name</label>
+            <input type="text" class="form-control-custom" name="catName" placeholder="Enter Category Name">
+          </div>
 
 
+          <button type="submit" class="btn-custom btn-custom-primary" name="catBtn">Add Category</button>
+        </form>
 
-            <div class="mb-3">
-              <label for="basicEmail" class="form-label-custom">Category Name</label>
-              <select name="categoryId" class="form-select-custom" id="selectControl">
-                <option selected disabled>Choose a category...</option>
-
-
-
-                <?php foreach ($categoryData as $category) { ?>
-                  <option value="<?= $category['categoryId'] ?>"><?= $category['categoryName'] ?></option>
-                <?php } ?>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="basicEmail" class="form-label-custom">Product Image</label>
-              <input type="file" class="form-control-custom" name="prodImage">
-            </div>
-
-            <button type="submit" class="btn-custom btn-custom-primary" name="prodBtn">Add Product</button>
-          </form>
-
-
-
+      
+         
         </div>
       </div>
 
-
+    
 
       <!-- Column 4: Checkboxes, Radios & iOS Switches -->
-
+     
     </div>
     <!-- END: Form Component Row Grid Layout -->
 
@@ -423,7 +368,9 @@ if (isset($_POST['prodBtn'])) {
           <i class="bi bi-asterisk"></i> Spark Admin
         </span>
         <span class="footer-separator">|</span>
-        <span class="footer-copy">&copy; 2026 Made with <i class="bi bi-heart-fill text-danger footer-heart"></i> by<a href="https://sparkadminpro.gumroad.com/" target="_blank">Spark Admin</a>• Distributed by <a href="https://www.themewagon.com/" target="_blank">ThemeWagon</a> </span>
+        <span class="footer-copy">&copy; 2026 Made with <i class="bi bi-heart-fill text-danger footer-heart"></i> by<a
+            href="https://sparkadminpro.gumroad.com/" target="_blank">Spark Admin</a>• Distributed by <a
+            href="https://www.themewagon.com/" target="_blank">ThemeWagon</a> </span>
       </div>
       <div class="footer-right">
         <ul class="footer-links">

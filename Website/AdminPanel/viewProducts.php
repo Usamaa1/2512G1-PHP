@@ -4,9 +4,7 @@ include "../connection/connection.php";
 
 
 
-
-
-$viewQuery = "SELECT * FROM `products`";
+$viewQuery = "SELECT * FROM products JOIN category on products.categoryId	= category.categoryId";
 
 
 $viewPrepare = $connection->prepare($viewQuery);
@@ -25,9 +23,9 @@ if(isset($_GET['search'])){
   $searchPrepare->execute();
   $productsData =  $searchPrepare->fetchAll(PDO::FETCH_ASSOC);
 
-
-
 }
+
+
 
 
 
@@ -358,6 +356,7 @@ if(isset($_GET['search'])){
                     onerror="this.src='assets/images/avatar.png'">
                   <div>
                     <div class="table-user-name"><?= $prod['prodName'] ?></div>
+                    <div class="table-user-sub"><?= $prod['categoryName'] ?></div>
                   </div>
                 </div>
               </td>
