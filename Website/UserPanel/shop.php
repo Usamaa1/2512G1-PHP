@@ -1,26 +1,28 @@
-<?php 
+<?php
 
-  require('../connection/connection.php');
+include('verifyUser.php');
 
-
-  $getCategoryQuery = "SELECT category.categoryId as categoryId, categoryName, COUNT(categoryName) as categoryCount FROM `category` JOIN `products` ON category.categoryId = products.categoryId GROUP BY categoryName";
-
-  $getCategoryPrepare = $connection->prepare($getCategoryQuery);
-  $getCategoryPrepare->execute();
-  $getCategoryData = $getCategoryPrepare->fetchAll(PDO::FETCH_ASSOC);
-
-  echo "<pre>";
-  print_r($getCategoryData);
-  echo "</pre>";
+require('../connection/connection.php');
 
 
+$getCategoryQuery = "SELECT category.categoryId as categoryId, categoryName, COUNT(categoryName) as categoryCount FROM `category` JOIN `products` ON category.categoryId = products.categoryId GROUP BY categoryName";
+
+$getCategoryPrepare = $connection->prepare($getCategoryQuery);
+$getCategoryPrepare->execute();
+$getCategoryData = $getCategoryPrepare->fetchAll(PDO::FETCH_ASSOC);
+
+echo "<pre>";
+print_r($getCategoryData);
+echo "</pre>";
 
 
-  $getProductQuery = "SELECT * FROM `products`";
 
-  $getProductPrepare = $connection->prepare($getProductQuery);
-  $getProductPrepare->execute();
-  $getProductData = $getProductPrepare->fetchAll(PDO::FETCH_ASSOC);
+
+$getProductQuery = "SELECT * FROM `products`";
+
+$getProductPrepare = $connection->prepare($getProductQuery);
+$getProductPrepare->execute();
+$getProductData = $getProductPrepare->fetchAll(PDO::FETCH_ASSOC);
 
 
 
@@ -37,13 +39,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Shop — Sprylo</title>
-  <meta name="description"
-    content="Browse the full Sprylo catalogue — smartphones, laptops, cameras, audio, wearables, and gaming. Filter by brand, price, and rating." />
+  <meta name="description" content="Browse the full Sprylo catalogue — smartphones, laptops, cameras, audio, wearables, and gaming. Filter by brand, price, and rating." />
   <meta name="theme-color" content="#4F46E5" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Outfit:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Outfit:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
@@ -62,26 +62,20 @@
       <a href="index.html" class="brand"><span class="brand-mark">S</span> Sprylo</a>
       <form class="search" role="search" onsubmit="event.preventDefault();">
         <input type="text" placeholder="Search for products, brands, categories…" />
-        <button type="submit" aria-label="Search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <button type="submit" aria-label="Search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
             <circle cx="11" cy="11" r="7" />
             <path d="M21 21l-4.3-4.3" />
           </svg></button>
       </form>
       <div class="icon-row">
-        <a href="#" class="icon-btn" aria-label="Account"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <a href="#" class="icon-btn" aria-label="Account"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
             <circle cx="12" cy="8" r="4" />
             <path d="M4 21c0-4 4-7 8-7s8 3 8 7" />
           </svg></a>
-        <a href="#" class="icon-btn" aria-label="Wishlist"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path
-              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+        <a href="#" class="icon-btn" aria-label="Wishlist"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
           </svg><span class="count">3</span></a>
-        <a href="cart.html" class="icon-btn icon-btn--cart" aria-label="Cart"><svg width="20" height="20"
-            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
+        <a href="cart.html" class="icon-btn icon-btn--cart" aria-label="Cart"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2l-2 5v13a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7l-2-5z" />
             <path d="M4 7h16" />
             <path d="M16 11a4 4 0 0 1-8 0" />
@@ -91,31 +85,7 @@
     </div>
   </header>
 
-  <nav class="nav-bar" aria-label="Primary">
-    <div class="container">
-      <a href="shop.html" class="all-cats"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
-          <line x1="3" y1="6" x2="21" y2="6" />
-          <line x1="3" y1="12" x2="21" y2="12" />
-          <line x1="3" y1="18" x2="21" y2="18" />
-        </svg>All Categories</a>
-      <div class="main-nav">
-        <a href="index.html">Home</a>
-        <a href="shop.html" aria-current="page">Shop ▾</a>
-        <a href="product.html">Products</a>
-        <a href="cart.html">Cart</a>
-        <a href="contact.html">Contact</a>
-      </div>
-      <span class="nav-cta">UP TO <strong>60% OFF</strong> ALL ITEMS</span>
-    </div>
-  </nav>
-
-  <div class="drawer" id="drawer" aria-hidden="true">
-    <div class="drawer-head"><a href="index.html" class="brand"><span class="brand-mark">S</span> Sprylo</a><button
-        class="drawer-close">Close ✕</button></div>
-    <a href="index.html">Home</a><a href="shop.html">Shop</a><a href="product.html">Products</a><a
-      href="cart.html">Cart</a><a href="contact.html">Contact</a>
-  </div>
+  <?php include('nav.php') ?>
 
   <main id="main">
 
@@ -137,7 +107,7 @@
             <div class="filter-block">
               <h3>Category</h3>
 
-              <?php foreach($getCategoryData as $category){ ?>
+              <?php foreach ($getCategoryData as $category) { ?>
 
                 <form action="" method="post">
                   <label><input type="checkbox" id="categoryName" checked value="<?= $category['categoryId'] ?>"> <?= $category['categoryName'] ?> <span class="ct"> <?= $category['categoryCount'] ?></span></label>
@@ -147,12 +117,10 @@
             </div>
             <div class="filter-block">
               <h3>Price range</h3>
-              <div
-                style="display:flex; justify-content:space-between; font-family:var(--ff-mono); font-size:11px; color:var(--fg-mute)">
+              <div style="display:flex; justify-content:space-between; font-family:var(--ff-mono); font-size:11px; color:var(--fg-mute)">
                 <span>$120</span><span>$3,400</span></div>
               <div class="range-bar" aria-hidden="true"></div>
-              <div
-                style="display:flex; justify-content:space-between; font-family:var(--ff-mono); font-size:var(--text-xs); font-weight:600; color:var(--ink); margin-top:var(--s2)">
+              <div style="display:flex; justify-content:space-between; font-family:var(--ff-mono); font-size:var(--text-xs); font-weight:600; color:var(--ink); margin-top:var(--s2)">
                 <span>$420</span><span>$2,380</span></div>
             </div>
             <div class="filter-block">
@@ -196,20 +164,18 @@
             </div>
 
             <div class="shop-grid">
-            
-            <?php foreach($getProductData as $prod){ ?>
-              <article class="product-card">
-                <div class="img-wrap"><button class="wishlist">♡</button><img
-                    src="../AdminPanel/assets/images/<?= $prod['prodImage'] ?>"
-                    alt="" /></div>
-                <div class="stock"><span class="dot"></span>In stock · <?= $prod['prodStock'] ?> items</div>
-                <a href="product.html" class="name"><?= $prod['prodName'] ?></a>
-                <div class="price"><span class="now">$<?= $prod['prodPrice'] ?></span></div>
-                <div class="stars">★★★★☆ <span class="count"><?= $prod['prodRating'] ?></span></div>
-                <a href="cart.html" class="btn">Order now →</a>
-              </article>
 
-            <?php } ?>
+              <?php foreach ($getProductData as $prod) { ?>
+                <article class="product-card">
+                  <div class="img-wrap"><button class="wishlist">♡</button><img src="../AdminPanel/assets/images/<?= $prod['prodImage'] ?>" alt="" /></div>
+                  <div class="stock"><span class="dot"></span>In stock · <?= $prod['prodStock'] ?> items</div>
+                  <a href="product.html" class="name"><?= $prod['prodName'] ?></a>
+                  <div class="price"><span class="now">$<?= $prod['prodPrice'] ?></span></div>
+                  <div class="stars">★★★★☆ <span class="count"><?= $prod['prodRating'] ?></span></div>
+                  <a href="cart.html" class="btn">Order now →</a>
+                </article>
+
+              <?php } ?>
 
 
             </div>
@@ -294,26 +260,21 @@
       </div>
       <div class="footer-bottom">
         <span>© 2026 Sprylo · All rights reserved</span>
-        <span>Free HTML template · No framework · No build step. Distributed by <a href="https://themewagon.com/"
-            target="_blank">ThemeWagon</a></span>
+        <span>Free HTML template · No framework · No build step. Distributed by <a href="https://themewagon.com/" target="_blank">ThemeWagon</a></span>
       </div>
     </div>
   </footer>
 
   <script src="assets/js/main.js" defer></script>
   <script>
-  
-              let categoryName = document.querySelectorAll('#categoryName');
+    let categoryName = document.querySelectorAll('#categoryName');
 
-              categoryName.forEach(element => {
-                element.addEventListener('change',(e)=>{
-                  console.log(element.value);
-                  console.log(e.srcElement.checked)
-                })
-              });
-  
-  
-  
+    categoryName.forEach(element => {
+      element.addEventListener('change', (e) => {
+        console.log(element.value);
+        console.log(e.srcElement.checked)
+      })
+    });
   </script>
 </body>
 
