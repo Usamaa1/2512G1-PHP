@@ -1,8 +1,12 @@
 
 <?php
-
+session_start();
 include "../connection/connection.php";
+if (isset($_SESSION['email'])) {
 
+  header("location:index.php");
+  
+  }
 
 if(isset($_POST['signupBtn']))
 {

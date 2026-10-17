@@ -1305,3 +1305,17 @@ input, select, textarea { font: inherit; color: inherit; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   html { scroll-behavior: auto; }
 }
+
+.myIcon{
+  position: relative;
+}
+
+.userBox{
+  display: none;
+  background-color: #ffff;
+  padding: 20px 40px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  position: absolute;
+  top: 50px;
+  left: 0px;
+}

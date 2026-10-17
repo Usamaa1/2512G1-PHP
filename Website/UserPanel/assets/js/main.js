@@ -64,3 +64,14 @@
     });
   });
 })();
+
+
+
+let userBox = document.getElementById('userBox');
+let myIcon = document.getElementById('myIcon');
+
+myIcon.addEventListener('mouseover',(e)=>{
+  userBox.style.display = 'block'
+})
+
+
