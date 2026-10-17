@@ -35,7 +35,7 @@
 
 
 
-<?php include('nav.php') ?>
+<?php require('nav.php') ?>
 
   <main id="main">
 

@@ -30,8 +30,8 @@ $lastName = $_SESSION['lastName'][0];
         <p style="font-size: 20px;"><?= $firstName . $lastName ?></p>
         <div class="userBox" id="userBox">
           <p><?=$_SESSION['firstName'] ." ". $_SESSION['lastName'] ?></p>
-          <p><?=$_SESSION['email'] ?></p>
-          <button class="all-cats">Logout</button>
+          <p style="padding-bottom: 8px"><?=$_SESSION['email'] ?></p>
+          <a href="logout.php" class="all-cats">Logout</a>
         </div>
         </a>
 
