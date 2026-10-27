@@ -1,3 +1,74 @@
+<?php 
+
+
+include('../connection/connection.php');
+
+session_start();
+
+$prodId = $_GET['id'];
+
+
+
+$getProductQuery = "SELECT * FROM `products` where id= :id";
+
+$getProductPrepare = $connection->prepare($getProductQuery);
+$getProductPrepare->bindParam(":id",$prodId,PDO::PARAM_INT);
+$getProductPrepare->execute();
+$getProductData = $getProductPrepare->fetch(PDO::FETCH_ASSOC);
+
+
+
+
+$getCartQuery = "SELECT * FROM `cart` where `prod_id`= :id";
+
+$getCartPrepare = $connection->prepare($getCartQuery);
+$getCartPrepare->bindParam(":id",$prodId,PDO::PARAM_INT);
+$getCartPrepare->execute();
+$getCartData = $getCartPrepare->fetch(PDO::FETCH_ASSOC);
+
+print_r($getCartData);
+
+
+
+
+
+if(isset($_POST['cartBtn']))
+{
+
+  $cartQuantity = $_POST['cartQuantity'];
+
+  $cartInsertQuery = "INSERT INTO `cart`(`prod_id`, `user_id`, `quantity`) VALUES (:prodId,:userId, :qty)";
+
+  $cartPrepare = $connection->prepare($cartInsertQuery);
+  $cartPrepare->bindParam(':prodId',$prodId,PDO::PARAM_INT);
+  $cartPrepare->bindParam(':userId',$_SESSION['userId'],PDO::PARAM_INT);
+  $cartPrepare->bindParam(':qty',$cartQuantity,PDO::PARAM_INT);
+  
+  if($cartPrepare->execute()){
+    echo "<script>alert('Product Added successfully')</script>";
+  }
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+?>
+
+
+
+
 <!doctype html>
 <html lang="en">
 
@@ -37,7 +108,7 @@
 
         <div class="gallery">
           <div class="gallery-thumbs">
-            <button class="is-active"><img
+            <!-- <button class="is-active"><img
                 src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=200&q=80&auto=format&fit=crop"
                 alt="" /></button>
             <button><img src="https://images.unsplash.com/photo-1545454675-3531b543be5d?w=200&q=80&auto=format&fit=crop"
@@ -50,20 +121,20 @@
                 alt="" /></button>
             <button><img
                 src="https://images.unsplash.com/photo-1574920162043-b872873f19c8?w=200&q=80&auto=format&fit=crop"
-                alt="" /></button>
+                alt="" /></button> -->
           </div>
           <figure class="gallery-main">
-            <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=900&q=80&auto=format&fit=crop"
+            <img src="../AdminPanel/assets/images/<?= $getProductData['prodImage'] ?>"
               alt="HomePod 2nd Gen speaker" />
           </figure>
         </div>
 
         <div class="pdp-info">
           <span class="pdp-cat">⚡ Audio · Featured</span>
-          <h1>Apple HomePod 2nd Gen Speaker</h1>
+          <h1><?= $getProductData['prodName'] ?></h1>
           <div class="rating-row">
             <span style="color: var(--amber); font-size: 16px">★★★★★</span>
-            <span>4.9 / 5 · 312 reviews</span>
+            <span><?= $getProductData['prodRating'] ?>/ 5 · 312 reviews</span>
             <span style="color: var(--rule-strong)">|</span>
             <span style="color: var(--emerald); display:inline-flex; align-items:center; gap:6px"><span
                 style="width:6px;height:6px;background:var(--emerald);border-radius:999px;display:inline-block"></span>
@@ -74,7 +145,7 @@
             disappear into your room and fill it with sound.</p>
 
           <div class="price-row">
-            <span class="now">$280</span>
+            <span class="now">$<?= $getProductData['prodPrice'] ?></span>
             <span class="was">$320</span>
             <span class="save">Save 12%</span>
           </div>
@@ -109,16 +180,30 @@
             </div>
           </div>
 
+          <form action="" method="post">
           <div class="pdp-cta">
             <div class="qty">
               <button type="button" data-act="-" aria-label="Decrease">−</button>
-              <input type="text" value="1" inputmode="numeric" aria-label="Quantity" />
+              <input name="cartQuantity" type="text" value="1" inputmode="numeric" aria-label="Quantity" />
               <button type="button" data-act="+" aria-label="Increase">+</button>
             </div>
-            <a href="cart.html" class="btn btn--indigo" style="flex:1; min-width:160px">Add to cart →</a>
-            <a href="cart.html" class="btn btn--ink">Buy now</a>
-            <button class="icon-btn" aria-label="Add to wishlist" style="background: var(--bg)">♡</button>
+
+            <?php
+              if(!isset($getCartData)){
+            ?>
+            <button name="cartBtn" type="submit" class="btn btn--indigo" style="flex:1; min-width:160px">Add to cart →</button>
+
+              <?php }else{ ?>
+                <a href="cart.php"  type="submit" class="btn btn--paper" style="flex:1; min-width:160px">Go to cart →</a>
+
+              <?php } ?>
+
+
+            <!-- <a href="cart.html" class="btn btn--ink">Buy now</a>
+            <button class="icon-btn" aria-label="Add to wishlist" style="background: var(--bg)">♡</button> -->
           </div>
+          </form>
+      
 
           <div class="pdp-features">
             <div class="pf"><span class="ic">⚡</span><span>Free shipping over $50</span></div>

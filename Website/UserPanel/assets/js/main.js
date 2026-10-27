@@ -69,14 +69,20 @@
 
 
 let userBox = document.getElementById('userBox');
-let myIcon = document.getElementById('myIcon');
+let myIcon = document.getElementById('userIcon');
 myIcon.addEventListener('mouseover',(e)=>{
   console.log(e)
   userBox.style.display = 'block'
 })
-myIcon.addEventListener('mouseout',(e)=>{
-  console.log(e)
-  userBox.style.display = 'none'
-})
+// userBox.addEventListener('mousemove',(e)=>{
+//   userBox.style.display = 'none';
+// })
+
+
+
+// myIcon.addEventListener('mouseout',(e)=>{
+//   console.log(e)
+//   userBox.style.display = 'none'
+// })
 
 

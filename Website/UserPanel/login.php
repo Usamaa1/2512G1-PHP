@@ -40,6 +40,7 @@ if (isset($_POST['loginBtn'])) {
 
       if ($userData['role'] == 'user') {
 
+        $_SESSION['userId'] = $userData['id'];
         $_SESSION['firstName'] = $userData['firstName'];
         $_SESSION['lastName'] = $userData['lastName'];
         $_SESSION['email'] = $userData['email'];

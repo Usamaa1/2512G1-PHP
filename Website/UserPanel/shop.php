@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 include('verifyUser.php');
 
 require('../connection/connection.php');
@@ -142,10 +144,10 @@ $getProductData = $getProductPrepare->fetchAll(PDO::FETCH_ASSOC);
                 <article class="product-card">
                   <div class="img-wrap"><button class="wishlist">♡</button><img src="../AdminPanel/assets/images/<?= $prod['prodImage'] ?>" alt="" /></div>
                   <div class="stock"><span class="dot"></span>In stock · <?= $prod['prodStock'] ?> items</div>
-                  <a href="product.html" class="name"><?= $prod['prodName'] ?></a>
+                  <a href="product.php?id=<?= $prod['id'] ?>" class="name"><?= $prod['prodName'] ?></a>
                   <div class="price"><span class="now">$<?= $prod['prodPrice'] ?></span></div>
                   <div class="stars">★★★★☆ <span class="count"><?= $prod['prodRating'] ?></span></div>
-                  <a href="cart.html" class="btn">Order now →</a>
+                  <a href="cart.php" class="btn">Order now →</a>
                 </article>
 
               <?php } ?>
