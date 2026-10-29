@@ -2,8 +2,22 @@
 
 session_start();
 
-
+include "../connection/connection.php";
 include('verifyUser.php');
+
+
+$userId = $_SESSION['userId'];
+
+
+$cartQuery = "SELECT * FROM `cart` join `products` on products.id = cart.prod_id  WHERE `user_id`= :userId";
+$cartPrepare = $connection->prepare($cartQuery);
+$cartPrepare->bindParam(':userId',$userId,PDO::PARAM_INT);
+$cartPrepare->execute();
+$cartData = $cartPrepare->fetchAll(PDO::FETCH_ASSOC);
+echo "<pre>";
+print_r($cartData);
+echo "</pre>";
+
 
 
 
@@ -58,56 +72,27 @@ include('verifyUser.php');
 
           <div>
             <div class="cart-list">
-              <article class="cart-row">
-                <div class="pic"><img
-                    src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=200&q=80&auto=format&fit=crop"
-                    alt="" /></div>
-                <div class="info">
-                  <div class="name">Apple HomePod 2nd Gen Speaker</div>
-                  <div class="variant">White · Stereo pair · No AppleCare</div>
-                </div>
-                <div class="qty">
-                  <button data-act="-" aria-label="Decrease">−</button>
-                  <input type="text" value="1" inputmode="numeric" aria-label="Quantity" />
-                  <button data-act="+" aria-label="Increase">+</button>
-                </div>
-                <span class="subtotal">$280</span>
-                <button class="remove" aria-label="Remove">✕</button>
-              </article>
 
-              <article class="cart-row">
-                <div class="pic"><img
-                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&q=80&auto=format&fit=crop"
-                    alt="" /></div>
-                <div class="info">
-                  <div class="name">Apple Watch Series 9</div>
-                  <div class="variant">41mm · Midnight aluminum · Sport band M/L</div>
-                </div>
-                <div class="qty">
-                  <button data-act="-" aria-label="Decrease">−</button>
-                  <input type="text" value="1" inputmode="numeric" aria-label="Quantity" />
-                  <button data-act="+" aria-label="Increase">+</button>
-                </div>
-                <span class="subtotal">$680</span>
-                <button class="remove" aria-label="Remove">✕</button>
-              </article>
 
+            <?php foreach($cartData as $prod){ ?>
               <article class="cart-row">
                 <div class="pic"><img
-                    src="https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=200&q=80&auto=format&fit=crop"
+                    src="../AdminPanel/assets/images/<?= $prod['prodImage'] ?>"
                     alt="" /></div>
                 <div class="info">
-                  <div class="name">Beats Studio Buds Pro</div>
-                  <div class="variant">Black · Active noise cancelling</div>
+                  <div class="name"><?= $prod['prodName'] ?></div>
+                  <div class="variant">★<?= $prod['prodRating'] ?></div>
                 </div>
                 <div class="qty">
                   <button data-act="-" aria-label="Decrease">−</button>
-                  <input type="text" value="2" inputmode="numeric" aria-label="Quantity" />
+                  <input type="text" value="<?= $prod['quantity'] ?>" inputmode="numeric" aria-label="Quantity" />
                   <button data-act="+" aria-label="Increase">+</button>
                 </div>
-                <span class="subtotal">$560</span>
+                <span class="subtotal">$<?= $prod['quantity'] * $prod['prodPrice'] ?></span>
                 <button class="remove" aria-label="Remove">✕</button>
               </article>
+            <?php } ?>
+         
             </div>
 
             <div style="margin-top: var(--s5); display: flex; gap: var(--s3); flex-wrap: wrap">

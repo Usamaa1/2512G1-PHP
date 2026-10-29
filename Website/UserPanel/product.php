@@ -189,7 +189,7 @@ if(isset($_POST['cartBtn']))
             </div>
 
             <?php
-              if(!isset($getCartData)){
+              if(!$getCartData){
             ?>
             <button name="cartBtn" type="submit" class="btn btn--indigo" style="flex:1; min-width:160px">Add to cart →</button>
 
