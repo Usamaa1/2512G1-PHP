@@ -45,7 +45,7 @@ if(isset($_POST['cartBtn']))
   $cartPrepare->bindParam(':qty',$cartQuantity,PDO::PARAM_INT);
   
   if($cartPrepare->execute()){
-    echo "<script>alert('Product Added successfully')</script>";
+    header("location:product.php?id=$prodId");
   }
 
 
